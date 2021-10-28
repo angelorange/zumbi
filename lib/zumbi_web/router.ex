@@ -8,7 +8,7 @@ defmodule ZumbiWeb.Router do
   scope "/api", ZumbiWeb do
     pipe_through :api
 
-    resources "/survivors", SurvivorController, except: [:new, :edit]
+    post "/sign_up", SurvivorController, :sign_up
   end
 
   # Enables LiveDashboard only for development
