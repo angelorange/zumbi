@@ -12,9 +12,11 @@ defmodule Zumbi.User.Survivor do
   end
 
   @doc false
+  @optional ~w(is_infected)a
+  @required ~w(name gender last_location)a
   def changeset(survivor, attrs) do
     survivor
-    |> cast(attrs, [:name, :gender, :last_location, :is_infected])
-    |> validate_required([:name, :gender, :last_location, :is_infected])
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
   end
 end

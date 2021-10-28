@@ -11,13 +11,13 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
   describe "sign in survivor" do
     test "renders survivor when data is valid", %{conn: conn} do
-      survivor = insert(:survivor)
+      survivor = params_for(:survivor)
       params =
         %{
           name: survivor.name,
           gender: survivor.gender,
           last_location: survivor.last_location,
-          is_infected: survivor.is_infected
+          is_infected: true
         }
 
       conn = post(conn, Routes.survivor_path(conn, :sign_up), survivor: params)
@@ -26,7 +26,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       assert expected["name"] == survivor.name
       assert expected["gender"] == survivor.gender
       assert expected["last_location"] == survivor.last_location
-      assert expected["is_infected"] == survivor.is_infected
+      assert expected["is_infected"] == false
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
