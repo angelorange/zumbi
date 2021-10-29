@@ -9,6 +9,8 @@ defmodule ZumbiWeb.Router do
     pipe_through :api
 
     post "/sign_up", SurvivorController, :sign_up
+
+    put "/update_location/:id", SurvivorController, :update_location
   end
 
   # Enables LiveDashboard only for development

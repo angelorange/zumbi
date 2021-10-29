@@ -15,6 +15,13 @@ defmodule ZumbiWeb.SurvivorController do
     end
   end
 
+  def update_location(conn, %{"id" => id, "survivor" => %{"last_location" => ll}}) do
+    with %Survivor{} = survivor <- User.get_survivor(id),
+      {:ok, %Survivor{} = survivor} <- User.update_survivor(survivor, %{last_location: ll}) do
+      render(conn, "show.json", survivor: survivor)
+    end
+  end
+
   defp clean_params(params) do
     {_v, map} = Map.pop(params, "is_infected")
 

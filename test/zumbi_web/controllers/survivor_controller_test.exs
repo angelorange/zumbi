@@ -36,6 +36,46 @@ defmodule ZumbiWeb.SurvivorControllerTest do
     end
   end
 
+  describe "update location " do
+    test "last location survivor", %{conn: conn} do
+      survivor = insert(:survivor)
+
+      params = %{
+        last_location: "miami"
+      }
+
+      conn = put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
+
+      assert expected = json_response(conn, 200)["data"]
+      assert expected["last_location"] == params.last_location
+    end
+
+    test "but not name", %{conn: conn} do
+      survivor = insert(:survivor)
+
+      params = %{
+        last_location: "miami",
+        name: "seila"
+      }
+
+      conn = put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
+
+      assert expected = json_response(conn, 200)["data"]
+      assert expected["last_location"] == params.last_location
+      assert expected["name"] == survivor.name
+    end
+
+    test "survivor doesn't exist", %{conn: conn} do
+      params = %{
+        last_location: "miami",
+      }
+
+      conn = put(conn, Routes.survivor_path(conn, :update_location, 1), survivor: params)
+
+      assert expected = json_response(conn, 404)
+    end
+  end
+
   defp create_survivor(_) do
     survivor = insert(:survivor)
     %{survivor: survivor}

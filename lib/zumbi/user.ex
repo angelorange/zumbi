@@ -101,4 +101,11 @@ defmodule Zumbi.User do
   def change_survivor(%Survivor{} = survivor, attrs \\ %{}) do
     Survivor.changeset(survivor, attrs)
   end
+
+  def get_survivor(id) do
+    case Zumbi.Repo.get(Survivor, id) do
+      %Survivor{} = survivor -> survivor
+      _ -> {:error, :not_found}
+    end
+  end
 end
