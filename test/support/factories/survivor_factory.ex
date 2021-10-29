@@ -4,7 +4,7 @@ defmodule Zumbi.SurvivorFactory do
       def survivor_factory do
         %Zumbi.User.Survivor{
           name: sequence("chika"),
-          gender: sequence("feminino"),
+          gender: "F",
           last_location: sequence("osaka"),
           is_infected: false
         }

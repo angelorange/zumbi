@@ -30,7 +30,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      params = params_for(:survivor, %{gender: nil, name: nil, last_location: nil, is_infected: nil})
+      params = params_for(:survivor, %{gender: "K", name: nil, last_location: nil})
       conn = post(conn, Routes.survivor_path(conn, :sign_up), survivor: params)
       assert json_response(conn, 422)["errors"] != %{}
     end

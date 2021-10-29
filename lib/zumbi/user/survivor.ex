@@ -18,5 +18,8 @@ defmodule Zumbi.User.Survivor do
     survivor
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
+    |> unique_constraint(:name)
+    |> validate_length(:name, min: 4, max: 12)
+    |> validate_inclusion(:gender, ["F", "M"])
   end
 end

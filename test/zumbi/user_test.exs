@@ -32,12 +32,14 @@ defmodule Zumbi.UserTest do
 
     test "create_survivor/1 with invalid data returns error changeset" do
       params = params_for(:survivor, %{
-        gender: nil,
-        name: nil,
+        gender: "K",
+        name: "oi",
         last_location: nil,
         is_infected: nil
       })
-      assert {:error, %Ecto.Changeset{}} = User.create_survivor(params)
+      assert {:error, changeset} = User.create_survivor(params)
+      assert changeset.errors[:name] |> elem(0) =~ "should be at least"
+      assert changeset.errors[:gender] |> elem(0) =~ "is invalid"
     end
 
     test "update_survivor/2 with valid data updates the survivor" do
@@ -45,7 +47,7 @@ defmodule Zumbi.UserTest do
       updated = params_for(:survivor,
       %{
         name: "osamu",
-        gender: "masculino",
+        gender: "M",
         last_location: "mikado",
         is_infected: true
       })
