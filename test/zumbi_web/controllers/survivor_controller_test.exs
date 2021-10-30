@@ -76,6 +76,44 @@ defmodule ZumbiWeb.SurvivorControllerTest do
     end
   end
 
+  describe "flag" do
+    test "returns not infected, when not yet 5 flags", %{conn: conn} do
+      survivor = insert(:survivor, %{flag: []})
+      x9 = insert(:survivor)
+
+      conn = post(conn, Routes.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
+
+      assert expected = json_response(conn, 200)["data"]
+      assert expected["flag"] == 1
+    end
+
+    test "returns error, when same person try to flag again", %{conn: conn} do
+      x9 = insert(:survivor)
+      survivor = insert(:survivor, %{flag: [x9.name]})
+
+      conn = post(conn, Routes.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
+
+      assert json_response(conn, 400)["data"]
+      assert Zumbi.User.get_survivor(survivor.id).flag == [x9.name]
+    end
+
+    test "returns infected, when reach 5 flags", %{conn: conn} do
+      x9 = insert(:survivor)
+      survivor = insert(:survivor, %{flag: ["oi", "oi", "oi", "oi"]})
+
+      conn = put(conn, Route.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
+
+      assert expected = json_response(conn, 200)["data"]
+      assert expected["is_infected"] == true
+      assert expected["flag"] == 5
+      assert expected["name"] == survivor.name
+    end
+
+    test "returns error when survivor doens't exist", %{conn: conn} do
+
+    end
+  end
+
   defp create_survivor(_) do
     survivor = insert(:survivor)
     %{survivor: survivor}
