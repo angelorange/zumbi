@@ -22,6 +22,14 @@ defmodule ZumbiWeb.SurvivorController do
     end
   end
 
+  def flag(conn, %{"id" => id, "flagger_id" => x9_id}) do
+    with %Survivor{} = x9 <- User.get_survivor!(x9_id),
+        %Survivor{} = survivor <- User.get_survivor!(id),
+        {:ok, survivor} <- User.flag_survivor(survivor, x9) do
+      render(conn, "show.json", survivor: survivor)
+    end
+  end
+
   defp clean_params(params) do
     {_v, map} = Map.pop(params, "is_infected")
 

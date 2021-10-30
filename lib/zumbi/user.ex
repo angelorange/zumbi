@@ -108,4 +108,8 @@ defmodule Zumbi.User do
       _ -> {:error, :not_found}
     end
   end
+
+  def flag_survivor(survivor, x9) do
+    update_survivor(survivor, %{flag: [x9.name]})
+  end
 end

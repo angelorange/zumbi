@@ -16,7 +16,8 @@ defmodule ZumbiWeb.SurvivorView do
       name: survivor.name,
       gender: survivor.gender,
       last_location: survivor.last_location,
-      is_infected: survivor.is_infected
+      is_infected: survivor.is_infected,
+      flag: survivor.flag |> length()
     }
   end
 end
