@@ -3,7 +3,6 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
   import Zumbi.Factory
 
-  alias Zumbi.User.Survivor
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -72,7 +71,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
       conn = put(conn, Routes.survivor_path(conn, :update_location, 1), survivor: params)
 
-      assert expected = json_response(conn, 404)
+      assert _expected = json_response(conn, 404)
     end
   end
 
@@ -93,7 +92,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
       conn = post(conn, Routes.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
 
-      assert json_response(conn, 400)["data"]
+      assert json_response(conn, 400)["error"]
       assert Zumbi.User.get_survivor(survivor.id).flag == [x9.name]
     end
 
@@ -101,7 +100,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       x9 = insert(:survivor)
       survivor = insert(:survivor, %{flag: ["oi", "oi", "oi", "oi"]})
 
-      conn = put(conn, Route.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
+      conn = post(conn, Routes.survivor_path(conn, :flag, survivor.id), flagger_id: x9.id)
 
       assert expected = json_response(conn, 200)["data"]
       assert expected["is_infected"] == true
@@ -110,12 +109,9 @@ defmodule ZumbiWeb.SurvivorControllerTest do
     end
 
     test "returns error when survivor doens't exist", %{conn: conn} do
+      conn = post(conn, Routes.survivor_path(conn, :flag, 0), flagger_id: 0)
 
+      assert json_response(conn, 404)
     end
-  end
-
-  defp create_survivor(_) do
-    survivor = insert(:survivor)
-    %{survivor: survivor}
   end
 end

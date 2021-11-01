@@ -21,4 +21,10 @@ defmodule ZumbiWeb.FallbackController do
     |> put_view(ZumbiWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, message}) do
+    conn
+    |> put_status(:bad_request)
+    |> json(%{error: %{message: message}})
+  end
 end

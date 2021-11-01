@@ -109,7 +109,21 @@ defmodule Zumbi.User do
     end
   end
 
-  def flag_survivor(survivor, x9) do
-    update_survivor(survivor, %{flag: [x9.name]})
+  def mark_infected(survivor, x9) do
+    case  flag_survivor(survivor, x9) do
+      {:ok, neo_survivor, 5} -> update_survivor(neo_survivor, %{is_infected: true})
+      {:ok, neo_survivor, _} -> {:ok, neo_survivor}
+      {:error, :already_flagged} -> {:error, :already}
+    end
+  end
+
+  defp flag_survivor(survivor, x9) do
+    case Enum.member?(survivor.flag, x9.name) do
+      false ->
+        {:ok, neo_survivor} = update_survivor(survivor, %{flag: survivor.flag ++ [x9.name]})
+        {:ok, neo_survivor, length(neo_survivor.flag)}
+      true ->
+        {:error, :already_flagged}
+    end
   end
 end
