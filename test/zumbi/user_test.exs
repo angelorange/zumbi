@@ -45,11 +45,12 @@ defmodule Zumbi.UserTest do
     test "update_survivor/2 with valid data updates the survivor" do
       survivor = insert(:survivor)
       updated = params_for(:survivor,
-      %{
-        name: "osamu",
-        gender: "M",
-        last_location: "mikado",
-        is_infected: true
+        %{
+          name: "osamu",
+          gender: "M",
+          last_location: "mikado",
+          is_infected: true,
+          inventory: %{}
       })
 
       assert {:ok, %Survivor{} = survivor} = User.update_survivor(survivor, updated)

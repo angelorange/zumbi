@@ -16,7 +16,13 @@ defmodule ZumbiWeb.SurvivorControllerTest do
           name: survivor.name,
           gender: survivor.gender,
           last_location: survivor.last_location,
-          is_infected: true
+          is_infected: true,
+          inventory: %{
+            "fiji_water" => 2,
+            "ak47" => 2,
+            "campbell_soup" => 1,
+            "first_aid_pouch" => 1
+          }
         }
 
       conn = post(conn, Routes.survivor_path(conn, :sign_up), survivor: params)
@@ -26,6 +32,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       assert expected["gender"] == survivor.gender
       assert expected["last_location"] == survivor.last_location
       assert expected["is_infected"] == false
+      assert expected["inventory"] == params.inventory
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

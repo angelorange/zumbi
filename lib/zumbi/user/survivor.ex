@@ -9,15 +9,19 @@ defmodule Zumbi.User.Survivor do
     field :name, :string
     field :flag, {:array, :string}, default: []
 
+    embeds_one :inventory, Zumbi.User.Inventory, on_replace: :update
+
     timestamps()
   end
 
-  @doc false
   @optional ~w(is_infected flag)a
   @required ~w(name gender last_location)a
+
+  @doc false
   def changeset(survivor, attrs) do
     survivor
     |> cast(attrs, @required ++ @optional)
+    |> cast_embed(:inventory)
     |> validate_required(@required)
     |> unique_constraint(:name)
     |> validate_length(:name, min: 4, max: 12)

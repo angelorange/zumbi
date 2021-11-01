@@ -6,7 +6,13 @@ defmodule Zumbi.SurvivorFactory do
           name: sequence("chika"),
           gender: "F",
           last_location: sequence("osaka"),
-          is_infected: false
+          is_infected: false,
+          inventory: %{
+            fiji_water: 2,
+            ak47: 2,
+            campbell_soup: 1,
+            first_aid_pouch: 1
+          }
         }
       end
     end

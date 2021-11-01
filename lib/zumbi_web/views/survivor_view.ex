@@ -17,7 +17,13 @@ defmodule ZumbiWeb.SurvivorView do
       gender: survivor.gender,
       last_location: survivor.last_location,
       is_infected: survivor.is_infected,
-      flag: survivor.flag |> length()
+      flag: survivor.flag |> length(),
+      inventory: %{
+        fiji_water: survivor.inventory.fiji_water,
+        first_aid_pouch: survivor.inventory.first_aid_pouch,
+        campbell_soup: survivor.inventory.campbell_soup,
+        ak47: survivor.inventory.ak47
+      }
     }
   end
 end
