@@ -35,7 +35,7 @@ defmodule ZumbiWeb.SurvivorController do
         %Survivor{} = survivor_two <- User.get_survivor(params["survivor_two"]),
         true <- User.fair_trade?(params["inventory_one"], params["inventory_two"]),
         {:ok, survivors} <- User.execute_trade(survivor_one, survivor_two, params) do
-      render(conn, "index.json", survivors: [survivor_one, survivor_two])
+      render(conn, "index.json", survivors: survivors)
     end
   end
 

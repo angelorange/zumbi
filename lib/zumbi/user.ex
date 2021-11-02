@@ -127,11 +127,40 @@ defmodule Zumbi.User do
     end
   end
 
-  def fair_trade?(inventory_one, inventory_two) do
-    true
+  def fair_trade?(deal_a, deal_b) do
+    calculus(deal_a) == calculus(deal_b)
+  end
+
+  defp calculus(deal) do
+    valor = %{
+      "fiji_water" =>  14,
+      "campbell_soup" => 12,
+      "first_aid_pouch" => 10,
+      "ak47" => 8
+    }
+
+    Enum.reduce(deal, 0, fn {k, v}, acc ->
+      (valor[k] * v) + acc
+    end)
   end
 
   def execute_trade(p1, p2, %{"inventory_one" => i_one, "inventory_two" => i_two}) do
+    pl1 = update_inventory(p1, i_one, i_two)
+    pl2 = update_inventory(p2, i_two, i_one)
 
+    {:ok, [pl1, pl2]}
+  end
+
+  defp update_inventory(survivor, i_one, i_two) do
+    nsei = survivor.inventory
+    invt = %{fiji_water: 0, first_aid_pouch: 0, ak47: 0, campbell_soup: 0}
+
+    invt = %{invt | fiji_water:  nsei.fiji_water + Map.get(i_two, "fiji_water", 0) - Map.get(i_one, "fiji_water", 0)}
+    invt = %{invt | first_aid_pouch:  nsei.first_aid_pouch + Map.get(i_two, "first_aid_pouch", 0) - Map.get(i_one, "first_aid_pouch", 0)}
+    invt = %{invt | campbell_soup:  nsei.campbell_soup + Map.get(i_two, "campbell_soup", 0) - Map.get(i_one, "campbell_soup", 0)}
+    invt = %{invt | ak47:  nsei.ak47 + Map.get(i_two, "ak47", 0) - Map.get(i_one, "ak47", 0)}
+
+    {:ok, survivor} = update_survivor(survivor, %{inventory: invt})
+    survivor
   end
 end

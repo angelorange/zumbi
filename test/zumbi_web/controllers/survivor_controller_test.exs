@@ -124,7 +124,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
   describe "trade" do
     test" returns :ok, when a fair trade between 2 survivors" do
-      survivor_one = insert(:survivor, %{inventory: %{fiji_water: 6, first_aid_pouch: 6}}) |> IO.inspect
+      survivor_one = insert(:survivor, %{inventory: %{fiji_water: 6, first_aid_pouch: 6}})
       survivor_two = insert(:survivor, %{inventory: %{campbell_soup: 7, ak47: 7}})
 
       params = %{
@@ -147,10 +147,10 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       assert expected["inventory"]["ak47"] == 6
 
       assert outro["id"] == survivor_two.id
-      assert expected["inventory"]["fiji_water"] == 5
-      assert expected["inventory"]["first_aid_pouch"] == 5
-      assert expected["inventory"]["campbell_soup"] == 1
-      assert expected["inventory"]["ak47"] == 1
+      assert outro["inventory"]["fiji_water"] == 5
+      assert outro["inventory"]["first_aid_pouch"] == 5
+      assert outro["inventory"]["campbell_soup"] == 1
+      assert outro["inventory"]["ak47"] == 1
     end
   end
 end
