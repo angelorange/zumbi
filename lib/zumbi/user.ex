@@ -128,10 +128,10 @@ defmodule Zumbi.User do
   end
 
   def fair_trade?(deal_a, deal_b) do
-    calculus(deal_a) == calculus(deal_b)
+    calc_points(deal_a) == calc_points(deal_b)
   end
 
-  defp calculus(deal) do
+  defp calc_points(deal) do
     valor = %{
       "fiji_water" =>  14,
       "campbell_soup" => 12,
