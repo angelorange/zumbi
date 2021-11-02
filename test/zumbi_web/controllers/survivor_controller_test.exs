@@ -3,7 +3,6 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
   import Zumbi.Factory
 
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -11,19 +10,19 @@ defmodule ZumbiWeb.SurvivorControllerTest do
   describe "sign in survivor" do
     test "renders survivor when data is valid", %{conn: conn} do
       survivor = params_for(:survivor)
-      params =
-        %{
-          name: survivor.name,
-          gender: survivor.gender,
-          last_location: survivor.last_location,
-          is_infected: true,
-          inventory: %{
-            "fiji_water" => 2,
-            "ak47" => 2,
-            "campbell_soup" => 1,
-            "first_aid_pouch" => 1
-          }
+
+      params = %{
+        name: survivor.name,
+        gender: survivor.gender,
+        last_location: survivor.last_location,
+        is_infected: true,
+        inventory: %{
+          "fiji_water" => 2,
+          "ak47" => 2,
+          "campbell_soup" => 1,
+          "first_aid_pouch" => 1
         }
+      }
 
       conn = post(conn, Routes.survivor_path(conn, :sign_up), survivor: params)
 
@@ -50,7 +49,8 @@ defmodule ZumbiWeb.SurvivorControllerTest do
         last_location: "miami"
       }
 
-      conn = put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
+      conn =
+        put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
 
       assert expected = json_response(conn, 200)["data"]
       assert expected["last_location"] == params.last_location
@@ -64,7 +64,8 @@ defmodule ZumbiWeb.SurvivorControllerTest do
         name: "seila"
       }
 
-      conn = put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
+      conn =
+        put(conn, Routes.survivor_path(conn, :update_location, survivor.id), survivor: params)
 
       assert expected = json_response(conn, 200)["data"]
       assert expected["last_location"] == params.last_location
@@ -73,7 +74,7 @@ defmodule ZumbiWeb.SurvivorControllerTest do
 
     test "survivor doesn't exist", %{conn: conn} do
       params = %{
-        last_location: "miami",
+        last_location: "miami"
       }
 
       conn = put(conn, Routes.survivor_path(conn, :update_location, 1), survivor: params)
@@ -123,15 +124,15 @@ defmodule ZumbiWeb.SurvivorControllerTest do
   end
 
   describe "trade" do
-    test" returns :ok, when a fair trade between 2 survivors" do
+    test " returns :ok, when a fair trade between 2 survivors" do
       survivor_one = insert(:survivor, %{inventory: %{fiji_water: 6, first_aid_pouch: 6}})
       survivor_two = insert(:survivor, %{inventory: %{campbell_soup: 7, ak47: 7}})
 
       params = %{
         survivor_one: survivor_one.id,
-        inventory_one: %{fiji_water: 5, first_aid_pouch: 5},
+        deal_one: %{fiji_water: 5, first_aid_pouch: 5},
         survivor_two: survivor_two.id,
-        inventory_two: %{campbell_soup: 6, ak47: 6}
+        deal_two: %{campbell_soup: 6, ak47: 6}
       }
 
       conn =
