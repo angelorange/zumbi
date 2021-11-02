@@ -151,15 +151,14 @@ defmodule Zumbi.User do
     {:ok, [survivor_one, survivor_two]}
   end
 
-  defp update_inventory(survivor, d_one, d_two) do
-    nsei = survivor.inventory
+  defp update_inventory(%{inventory: bag} = survivor, minus, plus) do
+    fun = fn map, mapa, k -> Map.get(map, k, 0) - Map.get(mapa, k, 0) end
+
     invt = %{
-      %{fiji_water: 0, first_aid_pouch: 0, ak47: 0, campbell_soup: 0}
-      |
-      fiji_water:  nsei.fiji_water + Map.get(d_two, "fiji_water", 0) - Map.get(d_one, "fiji_water", 0),
-      first_aid_pouch:  nsei.first_aid_pouch + Map.get(d_two, "first_aid_pouch", 0) - Map.get(d_one, "first_aid_pouch", 0),
-      campbell_soup:  nsei.campbell_soup + Map.get(d_two, "campbell_soup", 0) - Map.get(d_one, "campbell_soup", 0),
-      ak47:  nsei.ak47 + Map.get(d_two, "ak47", 0) - Map.get(d_one, "ak47", 0)
+      fiji_water:  bag.fiji_water + fun.(plus, minus, "fiji_water"),
+      first_aid_pouch:  bag.first_aid_pouch + fun.(plus, minus, "first_aid_pouch"),
+      campbell_soup:  bag.campbell_soup + fun.(plus, minus, "campbell_soup"),
+      ak47:  bag.ak47 + fun.(plus, minus, "ak47")
     }
 
     {:ok, survivor} = update_survivor(survivor, %{inventory: invt})
