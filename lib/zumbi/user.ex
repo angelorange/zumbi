@@ -126,4 +126,12 @@ defmodule Zumbi.User do
         {:error, :already_flagged}
     end
   end
+
+  def fair_trade?(inventory_one, inventory_two) do
+    true
+  end
+
+  def execute_trade(p1, p2, %{"inventory_one" => i_one, "inventory_two" => i_two}) do
+
+  end
 end

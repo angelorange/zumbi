@@ -11,7 +11,9 @@ defmodule ZumbiWeb.Router do
     post "/sign_up", SurvivorController, :sign_up
 
     put "/update_location/:id", SurvivorController, :update_location
+
     post "/flag/:id", SurvivorController, :flag
+    post "/trade", SurvivorController, :trade
   end
 
   # Enables LiveDashboard only for development

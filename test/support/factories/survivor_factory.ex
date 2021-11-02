@@ -10,8 +10,8 @@ defmodule Zumbi.SurvivorFactory do
           inventory: %{
             fiji_water: 2,
             ak47: 2,
-            campbell_soup: 1,
-            first_aid_pouch: 1
+            campbell_soup: 2,
+            first_aid_pouch: 2
           }
         }
       end

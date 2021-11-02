@@ -3,10 +3,10 @@ defmodule Zumbi.User.Inventory do
   import Ecto.Changeset
 
   embedded_schema do
-    field :fiji_water, :integer
-    field :campbell_soup, :integer
-    field :first_aid_pouch, :integer
-    field :ak47, :integer
+    field :fiji_water, :integer, default: 0
+    field :campbell_soup, :integer, default: 0
+    field :first_aid_pouch, :integer, default: 0
+    field :ak47, :integer, default: 0
   end
 
   @required ~w(fiji_water campbell_soup first_aid_pouch ak47)a

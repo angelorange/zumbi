@@ -121,4 +121,36 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       assert json_response(conn, 404)
     end
   end
+
+  describe "trade" do
+    test" returns :ok, when a fair trade between 2 survivors" do
+      survivor_one = insert(:survivor, %{inventory: %{fiji_water: 6, first_aid_pouch: 6}}) |> IO.inspect
+      survivor_two = insert(:survivor, %{inventory: %{campbell_soup: 7, ak47: 7}})
+
+      params = %{
+        survivor_one: survivor_one.id,
+        inventory_one: %{fiji_water: 5, first_aid_pouch: 5},
+        survivor_two: survivor_two.id,
+        inventory_two: %{campbell_soup: 6, ak47: 6}
+      }
+
+      conn =
+        build_conn()
+        |> post("api/trade", params)
+
+      assert [expected, outro] = json_response(conn, 200)["data"]
+
+      assert expected["id"] == survivor_one.id
+      assert expected["inventory"]["fiji_water"] == 1
+      assert expected["inventory"]["first_aid_pouch"] == 1
+      assert expected["inventory"]["campbell_soup"] == 6
+      assert expected["inventory"]["ak47"] == 6
+
+      assert outro["id"] == survivor_two.id
+      assert expected["inventory"]["fiji_water"] == 5
+      assert expected["inventory"]["first_aid_pouch"] == 5
+      assert expected["inventory"]["campbell_soup"] == 1
+      assert expected["inventory"]["ak47"] == 1
+    end
+  end
 end
