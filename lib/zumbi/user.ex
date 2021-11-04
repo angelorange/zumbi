@@ -164,4 +164,57 @@ defmodule Zumbi.User do
     {:ok, survivor} = update_survivor(survivor, %{inventory: invt})
     survivor
   end
+
+  def get_total_infected(), do: get_infected() |> length()
+
+  def get_total_non_infected() do
+    Survivor
+    |> where([s], s.is_infected == false)
+    |> Repo.all()
+    |> length()
+  end
+
+  def get_average_item_per_survivor() do
+    survivors = list_survivors()
+
+    bags = Enum.map(survivors, fn s-> s.inventory end)
+
+    div = survivors |> length()
+
+    %{
+      ak47: Enum.reduce(bags, 0, fn b, acc -> b.ak47 + acc end) / div,
+      campbell_soup: Enum.reduce(bags, 0, fn b, acc -> b.campbell_soup + acc end) / div,
+      fiji_water: Enum.reduce(bags, 0, fn b, acc -> b.fiji_water + acc end) / div,
+      first_aid_pouch: Enum.reduce(bags, 0, fn b, acc -> b.first_aid_pouch + acc end) / div
+    }
+  end
+
+  def get_infected do
+    Survivor
+    |> where([s], s.is_infected == true)
+    |> Repo.all()
+  end
+
+  def lost_points() do
+    bags = get_infected() |> Enum.map(fn s-> s.inventory end)
+
+     total_bags =
+       %{
+        ak47: Enum.reduce(bags, 0, fn b, acc -> b.ak47 + acc end),
+        campbell_soup: Enum.reduce(bags, 0, fn b, acc -> b.campbell_soup + acc end),
+        fiji_water: Enum.reduce(bags, 0, fn b, acc -> b.fiji_water + acc end),
+        first_aid_pouch: Enum.reduce(bags, 0, fn b, acc -> b.first_aid_pouch + acc end)
+        }
+
+      valor = %{
+        fiji_water: 14,
+        campbell_soup: 12,
+        first_aid_pouch: 10,
+        ak47: 8
+      }
+
+      Enum.reduce(total_bags, 0, fn {k, v}, acc ->
+        (valor[k] * v) + acc
+      end)
+  end
 end

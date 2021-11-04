@@ -168,11 +168,13 @@ defmodule ZumbiWeb.SurvivorControllerTest do
         "first_aid_pouch" => 3
       }
 
-      conn = get(conn, "api/reports")
+      # conn = get(conn, "api/reports")
+
+      conn = get(conn, Routes.survivor_path(conn, :report))
 
       assert expected = json_response(conn, 200)["data"]
       assert expected["total_infected"] == 1
-      assert expected["total_non_infected"] = 2
+      assert expected["total_non_infected"] == 2
       assert expected["average_item_per_survivor"] == avg_map
       assert expected["lost_points"] == 98
     end

@@ -39,6 +39,18 @@ defmodule ZumbiWeb.SurvivorController do
     end
   end
 
+  def report(conn, _params) do
+    map = %{
+      total_infected: User.get_total_infected(),
+      total_non_infected: User.get_total_non_infected(),
+      average_item_per_survivor: User.get_average_item_per_survivor(),
+      lost_points: User.lost_points()
+    }
+
+
+    json(conn, %{data: map})
+  end
+
   defp clean_params(params) do
     {_v, map} = Map.pop(params, "is_infected")
 

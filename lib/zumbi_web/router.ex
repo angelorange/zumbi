@@ -14,6 +14,7 @@ defmodule ZumbiWeb.Router do
 
     post "/flag/:id", SurvivorController, :flag
     post "/trade", SurvivorController, :trade
+    get "/api/reports", SurvivorController, :report
   end
 
   # Enables LiveDashboard only for development
