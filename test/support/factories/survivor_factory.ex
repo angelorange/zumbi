@@ -11,7 +11,7 @@ defmodule Zumbi.SurvivorFactory do
             fiji_water: 2,
             ak47: 2,
             campbell_soup: 2,
-            first_aid_pouch: 2
+            first_aid_pouch: 3
           }
         }
       end

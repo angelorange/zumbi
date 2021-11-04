@@ -154,4 +154,27 @@ defmodule ZumbiWeb.SurvivorControllerTest do
       assert outro["inventory"]["ak47"] == 1
     end
   end
+
+  describe "reports" do
+    test "returns :ok, when valid data is stored", %{conn: conn} do
+      survivor = insert(:survivor, is_infected: true)
+      insert(:survivor)
+      insert(:survivor)
+
+      avg_map = %{
+        "fiji_water" => 2,
+        "ak47" => 2,
+        "campbell_soup" => 2,
+        "first_aid_pouch" => 3
+      }
+
+      conn = get(conn, "api/reports")
+
+      assert expected = json_response(conn, 200)["data"]
+      assert expected["total_infected"] == 1
+      assert expected["total_non_infected"] = 2
+      assert expected["average_item_per_survivor"] == avg_map
+      assert expected["lost_points"] == 98
+    end
+  end
 end
